@@ -26,12 +26,12 @@ df = pd.DataFrame(all_data)
 print(f"Total rows: {len(df)}")
 print(df.head())
 
-# if __name__ == "__main__":
-#     import requests
-#
-#     url = "https://data.medicaid.gov/api/1/datastore/query/6165f45b-ca93-5bb5-9d06-db29c692a360/0"
-#     params = {"limit": 100, "offset": 0}
-#
-#     r = requests.get(url, params=params)
-#     print(r.status_code)
-#     print(r.json()[:2] if isinstance(r.json(), list) else r.json())
+if __name__ == "__main__":
+    import requests
+
+    url = "https://data.medicaid.gov/api/1/datastore/query/6165f45b-ca93-5bb5-9d06-db29c692a360/0"
+    params = {"limit": 100, "offset": 0}
+
+    r = requests.get(url, params=params)
+    print(r.status_code)
+    print(r.json()[:2] if isinstance(r.json(), list) else r.json())
