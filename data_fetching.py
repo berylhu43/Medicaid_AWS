@@ -31,7 +31,7 @@ def fetch_census():
     for year in years:
         url = f"https://api.census.gov/data/{year}/acs/acs5"
         params = {
-            "get": "NAME,B17001_001E,B17001_002E,B27001_001E,B27001_005E",
+            "get": "NAME,B17001_001E,B17001_002E,B27001_001E,B27001_005E,B02001_002E,B02001_003E,B02001_004E,B02001_005E,B02001_006E,B02001_007E,B19013_001E,B01002_001E",
             "for": "county:*",
             "key": CENSUS_API_KEY
         }
@@ -51,8 +51,19 @@ def fetch_census():
         "b17001_002e": "poverty_pop",
         "b27001_001e": "total_pop_insurance",
         "b27001_005e": "uninsured_pop",
-        "b19013_001e": "median household income"
+        "b02001_002e": "white_pop",
+        "b02001_003e": "black_pop",
+        "b02001_004e": "native_american_pop",
+        "b02001_005e": "asian_pop",
+        "b02001_006e": "pacific_islander_pop",
+        "b02001_007e": "other_race_pop",
+        "b19013_001e": "median_household_income",
+        "b01002_001e": "median_age"
     })
+
+    for race in ["white", "black", "native_american", "asian", "pacific_islander", "other_race"]:
+        df[f"{race}_rate"] = pd.to_numeric(df[f"{race}_pop"], errors="coerce") / \
+                             pd.to_numeric(df["total_pop"], errors="coerce")
     df["poverty_rate"] = pd.to_numeric(df["poverty_pop"], errors="coerce") / \
                          pd.to_numeric(df["total_pop"], errors="coerce")
     df["uninsured_rate"] = pd.to_numeric(df["uninsured_pop"], errors="coerce") / \
@@ -98,7 +109,7 @@ if __name__ == "__main__":
 
     print("Fetching Census ACS data...")
     census_df = fetch_census()
-    upload_df_to_s3(census_df, "census_acs_2018_2024.csv")
+    upload_df_to_s3(census_df, "census_acs_2018_2024_v2.csv")
     print(f"Census total rows: {len(census_df)}")
 
     print("\nFetching CMS Medicaid data...")
